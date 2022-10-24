@@ -1,4 +1,4 @@
-const { getUser } = require("../mock/getUser.mock");
+const { getUser } = require("../user/getUser");
 const axios = require("axios");
 
 const user1 = {
@@ -8,7 +8,14 @@ const user1 = {
     completed: false,
 };
 
+jest.mock("axios")
+
 describe("PROMISES", () => {
+
+    beforeAll(() => {
+        axios.get.mockReturnValueOnce({ data: user1 })
+    })
+
     test("Is user 1 - then ", () => {
         getUser(1).then((data) => {
             expect(data).toEqual(user1);
@@ -16,7 +23,7 @@ describe("PROMISES", () => {
     });
 
     test("getting user 1 with axios - await ", async () => {
-        const result = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+        const result = await axios.get();
         expect(result.data).toEqual(user1);
         expect(result).not.toBeNull();
     });
